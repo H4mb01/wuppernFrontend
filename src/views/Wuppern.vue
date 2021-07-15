@@ -1,7 +1,6 @@
 <template>
     <div class="wuppern">
-        <SetUsername v-if="!loggedIn" :login="login" />
-        <Waiting v-if="false" />
+        <SetUsername v-if="false" :login="login" />
         <Spielfeld v-if="loggedIn" />
     </div>
 </template>
@@ -9,7 +8,6 @@
 <script>
 import Spielfeld from "@/components/Spielfeld.vue";
 import SetUsername from "@/components/SetUsername.vue";
-import Waiting from "@/components/Waiting.vue";
 
 
 export default {
@@ -22,7 +20,6 @@ export default {
     components: {
         Spielfeld,
         SetUsername,
-        Waiting,
     },
     computed: {
         loggedIn() {
