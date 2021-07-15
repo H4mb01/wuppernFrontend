@@ -1,7 +1,7 @@
 <template>
     <div class="wuppern">
         <SetUsername v-if="false" :login="login" />
-        <Spielfeld v-if="loggedIn" />
+        <Spielfeld v-if="true" />
     </div>
 </template>
 
