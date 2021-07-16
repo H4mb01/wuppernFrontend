@@ -7,7 +7,7 @@
             :class="karte.farbe === '♦'|| karte.farbe === '♥'? 'rot' : 'schwarz'"
             >
                 <div class="oben"> {{karte.zahl}} <i class="farbe"> {{karte.farbe}} </i></div>
-                <div class="mitte"> {{karte.farbe}} </div>
+                <div class="mitte"> {{karte.zahl}} </div>
                 <div class="unten"> {{karte.zahl}} <i class="farbe"> {{karte.farbe}} </i></div>
             </div>
         </div>
