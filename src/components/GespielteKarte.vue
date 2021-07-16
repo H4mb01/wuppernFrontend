@@ -8,6 +8,7 @@
             >
                 <div class="oben"> {{karte.zahl}} <i class="farbe"> {{karte.farbe}} </i></div>
                 <div class="mitte"> {{karte.zahl}} </div>
+                <div class="mitteBackground" > {{ karte.farbe }} </div> 
                 <div class="unten"> {{karte.zahl}} <i class="farbe"> {{karte.farbe}} </i></div>
             </div>
         </div>
@@ -65,7 +66,8 @@
     }
     .schwarz {
         color: black;
-    }   .farbe {
+    }   
+    .farbe {
         font-size: 1.5rem;
     }
     .oben {
@@ -84,6 +86,18 @@
     }
     .mitte {
         font-size: 4rem;
+    }
+    .mitteBackground{
+        position: absolute;
+        font-size: 10rem;
+        top: -17.5%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        text-align: center;
+        opacity: 0.17;
+        padding: 0;
     }
     .rot {
         color: red;
