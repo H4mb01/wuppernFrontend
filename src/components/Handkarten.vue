@@ -59,6 +59,7 @@ export default {
         cursor: pointer;
         transition: 250ms ease;
         box-shadow: 1px 1px 5px 1px black;
+        overflow: hidden;
     }
     .karte:hover,
     .karte:focus {

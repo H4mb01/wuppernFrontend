@@ -52,7 +52,10 @@
         <div v-if="isLoggedIn && isStarted && !isEnded ">
             <button id="logout" @click="logout()"></button>
             <h3>Runde {{ runde.aktuell }} / {{ runde.maximal }}</h3>
-            <p> {{ this.gamestate.anDerReihe }} ist an der Reihe.</p>
+            <p> <span v-if="dran!==username" >   {{ this.gamestate.anDerReihe }} </span> <span v-if="dran===username" >DU b</span>ist an der Reihe. 
+                <span v-if="!ansagen.isAnsagen && gesamtAngesagt <= ansagen.optionen[ansagen.optionen.length-1]" > Es wird geschoben!</span> 
+                <span v-if="!ansagen.isAnsagen && gesamtAngesagt > ansagen.optionen[ansagen.optionen.length-1]" > Es wird gekloppt!</span> 
+            </p>
             <div class="tisch">
                 <div v-if="ansagen.isAnsagen" class="ansagen" :class="{ spezial: runde.aktuell === 1 || runde.aktuell === runde.maximal }" >
                     <h2> {{ ansagen.aktuell }} muss ansagen! </h2>
@@ -125,6 +128,7 @@ export default {
             fuehrung: "",
             creator: "",
             ansagen: {},
+            gesamtAngesagt: 0,
             reihenfolge: [],
             players: [],
             ownCards: [],
@@ -232,7 +236,11 @@ export default {
                 this.creator = this.$store.getters.getGamestate.creator
                 this.reihenfolge = this.$store.getters.getGamestate.reihenfolge
                 this.ansagen = this.$store.getters.getGamestate.ansagen
-            }
+                this.gesamtAngesagt = 0
+                this.players.forEach(e => {this.gesamtAngesagt += e.angesagt})
+                console.log("isAnsagen:",this.ansagen.isAnsagen, "gesamtAngesagt:", this.gesamtAngesagt, "höchste option:", this.ansagen.optionen[this.ansagen.optionen.length-1])
+                
+                }
         },
         logout(){
             /*this.isLoggedIn = false;
@@ -268,18 +276,30 @@ export default {
 * {
     box-sizing: border-box;
 }
+:root{
+    --spielfeldbreite: 100%;
+    --spielfeldhoehe: 100%;
+    --kartenbreite: 0px;
+    --kartenhoehe: 0px;
+}
+
+@media only screen and (max-width: 500px){
+    :root{
+        --spielfeldbreite: 100%;
+    }
+}
 </style>
 
 <style scoped>
     .spielfeld {
-    box-sizing: border-box;
-    border: 2px solid black;
-    min-width: 600px;
-    max-width: 1000px;
-    min-height: 600px;
-    max-height: 1000px;
-    margin: auto;
-    position: relative;
+        box-sizing: border-box;
+        border: 2px solid black;
+        min-width: 600px;
+        max-width: 1920px;
+        min-height: 600px;
+        max-height: 1080px;
+        margin: auto;
+        position: relative;
     }
     .possible {
         font-size: .75rem;

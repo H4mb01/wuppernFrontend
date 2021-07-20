@@ -40,6 +40,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        overflow: hidden;
     }
      .farbe {
         font-size: 1.5rem;

@@ -1,13 +1,15 @@
 <template>
 <div class="upper">
     <div v-for="player in players" :key="player" class="spielercontainer">
-        <div class="avatar" v-bind:class="{dran: (dran===player.name)}" >
+        <div class="avatar" v-bind:class="{dran: (dran===player.name), big: (dran===player.name && player.name===username)}" >
             <div :class="player.name === fuehrung ? 'führung' : ''"></div>
         </div>
         <div v-if="username === player.name" class="du">DU</div>
         <div class="spieler">
-            <span class="b">{{player.name}}:</span> {{player.punkte}} <br>
-            <span :class="(player.aktuell === player.angesagt ? 'korrekt' : 'inkorrekt')">{{player.aktuell}}</span>/{{player.angesagt}}
+            <span class="b">{{player.name}}</span> <br>
+
+            <span class="b" > {{player.punkte}} </span>  
+            (<span :class="(player.aktuell === player.angesagt ? 'korrekt' : 'inkorrekt')">{{player.aktuell}}</span>/{{player.angesagt}})
         </div>
         <GespielteKarte :playedCards="playedCards" :playerName="player.name" />
     </div>
@@ -86,7 +88,7 @@
     .spielercontainer {
         margin-bottom: 5px;
         width: 100px;
-        height: 400px;
+        height: 320px;
         position: relative;
         z-index: 3;
     }
@@ -99,6 +101,7 @@
         border: 2px solid blue;
         overflow: hidden;
         box-shadow: 1px 1px 5px 1px black;
+        transition: all 250ms ease-in-out;
     }
     .avatar::before {
         content: '';
@@ -145,5 +148,8 @@
     }
     .inkorrekt{
         color:red;
+    }
+    .big{
+        transform:scale(1.2)
     }
 </style>
