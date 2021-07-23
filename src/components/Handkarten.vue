@@ -47,19 +47,24 @@ export default {
 <style scoped>
     .karte {
         background-color: white; 
-        border: 3px solid black;
-        border-radius: 12.5px;
-        width: 100px;
-        height: 150px;
+        border: calc(var(--kartenbreite)*0.03) solid black;
+        border-radius: calc(var(--kartenbreite)*0.125);
+        width: var(--kartenbreite);
+        height: var(--kartenhoehe);
         position: relative;
         user-select: none;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: center; 
         cursor: pointer;
         transition: 250ms ease;
         box-shadow: 1px 1px 5px 1px black;
         overflow: hidden;
+        margin-right: calc(var(--kartenbreite)*-0.33);
+        font-size: calc(var(--kartenbreite)*0.16);
+    }
+    .karte:last-child{
+        margin:0;
     }
     .karte:hover,
     .karte:focus {
@@ -81,28 +86,28 @@ export default {
         justify-content: center;
     }
     .farbe {
-        font-size: 1.5rem;
+        font-size: calc(var(--kartenbreite)*0.225);
     }
     .oben {
         position: absolute;
         top: 0px;
         left: 0px;
-        margin-left: 5px;
+        margin-left: 5%;
     }
     .unten {
         position: absolute;
         bottom: 0px;
         right: 0px;
-        margin-right: 5px;
+        margin-right: 5%;
         transform: rotate(180deg)
 
     }
     .mitte {
-        font-size: 3rem;
+        font-size: calc(var(--kartenbreite)*0.45);
     }
     .mitteBackground{
         position: absolute;
-        font-size: 10rem;
+        font-size: calc(var(--kartenbreite)*1.48);
         top: -17.5%;
         left: 0;
         width: 100%;

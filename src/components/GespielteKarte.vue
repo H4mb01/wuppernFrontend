@@ -30,20 +30,21 @@
         margin-top: 5px;
     }
     .karte {
-        background-color: white;
+        background-color: var(--karte-bg);
         border: 3px solid black;
         border-radius: 12.5px;
-        width: 100px;
-        height: 150px;
+        width: var(--kartenbreite);
+        height: var(--kartenhoehe);
         position: relative;
         user-select: none;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
+        font-size: calc(var(--kartenbreite)*0.16);
     }
      .farbe {
-        font-size: 1.5rem;
+        font-size: calc(var(--kartenbreite)*0.225);
     }
     .oben {
         position: absolute;
@@ -61,17 +62,9 @@
     }
     .mitte {
         font-size: 4rem;
+        font-size: calc(var(--kartenbreite)*0.45);
     }
-    .rot {
-        color: red;
-    }
-    .schwarz {
-        color: black;
-    }   
-    .farbe {
-        font-size: 1.5rem;
-    }
-    .oben {
+   .oben {
         position: absolute;
         top: 0px;
         left: 0px;
@@ -84,13 +77,11 @@
         margin-right: 5px;
         transform: rotate(180deg)
 
-    }
-    .mitte {
-        font-size: 4rem;
     }
     .mitteBackground{
         position: absolute;
         font-size: 10rem;
+        font-size: calc(var(--kartenbreite)*1.48);
         top: -17.5%;
         left: 0;
         width: 100%;
@@ -101,9 +92,9 @@
         padding: 0;
     }
     .rot {
-        color: red;
+        color: var(--karte-rot);
     }
     .schwarz {
-        color: black;
+        color: var(--karte-schwarz);
     }
 </style>

@@ -45,18 +45,20 @@
 
 <style scoped>
     .du{
-        min-width: 40px;
-        min-height: 25px;
+        min-width: calc(var(--avatar)*.4);
+        min-height: calc(var(--avatar)*.25);
         border: 2px solid red;
-        border-radius: 5px;
+        border: 2px solid var(--du-clr);
+        border-radius: calc(var(--avatar)*.05);
         background: transparent;
         position: absolute;
-        right: -3px;
-        top: 50px;
+        right: calc(var(--avatar)*-0.03);
+        top: calc(var(--avatar)*0.5);
         transform: rotate(330deg);
         z-Index: 4;
-        font-size: 1rem;
+        font-size: calc(var(--avatar)/6);
         color: red;
+        color: var(--du-clr);
         padding: 0;
         font-weight: bold;
         user-select: none;
@@ -71,34 +73,40 @@
         justify-content: space-around;
     }
     .spieler {
-        border: 3px solid rgb(148, 63, 30);
-        padding: 2px;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        width: 100px;
-        border-radius: 10px;
+        border: calc(var(--avatar)*0.03) solid rgb(148, 63, 30);
+        border: calc(var(--avatar)*0.03) solid var(--spielerinfo-clr2);
+        padding: calc(var(--avatar)*0.02);
+        padding-top: calc(var(--avatar)/10);
+        padding-bottom: calc(var(--avatar)/10);
+        width: var(--avatar);
+        border-radius: calc(var(--avatar)/10);
         position: relative;
-        top: -25px;
+        top: calc(-1*(var(--avatar)/4));
         background-color: rgb(247, 213, 168);
+        background-color: var(--spielerinfo-clr);
         margin-top: 0px;
-        font-size: .8rem;
+        font-size: calc(var(--avatar)/8);
         box-shadow: 1px 1px 5px 1px black;
         user-select: none;
+        overflow: hidden;
     }
     .spielercontainer {
         margin-bottom: 5px;
-        width: 100px;
-        height: 320px;
+        width: var(--avatar);
+        height: calc(var(--avatar)*3.2);
         position: relative;
         z-index: 3;
     }
+
     .avatar {
         position: relative;
-        width: 100px;
-        height: 100px;
-        border-radius: 50px;
+        width: var(--avatar);
+        height: var(--avatar);
+        border-radius: var(--avatar);
         background-color: rgb(97, 116, 221);
+        background-color: var(--avatar-clr);
         border: 2px solid blue;
+        border: 2px solid var(--avatar-clr2);
         overflow: hidden;
         box-shadow: 1px 1px 5px 1px black;
         transition: all 250ms ease-in-out;
@@ -106,6 +114,7 @@
     .avatar::before {
         content: '';
         background-color: blue;
+        background-color: var(--avatar-clr2);
         height: 28%;
         width: 28%;
         border-radius: 250px;
@@ -117,25 +126,30 @@
     .avatar::after {
         content: '';
         background-color: blue;
+        background-color: var(--avatar-clr2);
         height: 100%;
         width: 80%;
-        border-radius: 250px;
+        border-radius: var(--avatar);
         position: absolute;
         top: 50%;
         left: 10%;
     }
     .dran {
         background-color: rgb(120, 209, 120);
+        background-color: var(--avatar-active-clr);
         border: 3px solid green;
+        border: 3px solid var(--avatar-active-clr2);
     }
     .dran::before,
     .dran::after {
         background-color: green;
+        background-color: var(--avatar-active-clr2);
     }
     .führung {
         width: 20%;
         height: 20%;
         background-color: gold;
+        background-color: var(--avatar-krone-clr);
         position: absolute;
         top: 5%;
         left: 40%;
@@ -144,10 +158,12 @@
     }
     .korrekt{
         color: green;
+        color: var(--korrekt-clr);
         font-weight:bold;
     }
     .inkorrekt{
         color:red;
+        color:var(--warning-clr);
     }
     .big{
         transform:scale(1.2)

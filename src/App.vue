@@ -10,8 +10,15 @@
 </template>
 
 <style>
+
+:root {
+  --bg-clr: #eee;
+  --txt-clr: #2c3e50;
+}
+
 body {
-  background: #eee;
+  background: +eee;
+  background: var(--bg-clr);
   margin: 0;
 }
 
@@ -21,6 +28,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  color: var(--txt-clr);
 }
 
 #nav {

@@ -14,6 +14,7 @@
                 type="text" 
                 name="roomInput" 
                 id="roomInput"
+                autofocus
                     >
                 </td>
                 <td>
@@ -23,6 +24,7 @@
                 name="nameInput" 
                 id="nameInput"
                 placeholder="dein Name"
+                maxlength="12"
                     >
                 </td>
                 <td></td>
@@ -75,9 +77,10 @@ export default {
 <style scoped>
     .gameOverview{
         position: relative;
-        max-width: 80%;
-        margin-left: 10%;
-        margin-right: 10%;
+        width: 100%;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
         padding: 7px;
     }
     table {
@@ -124,5 +127,13 @@ export default {
     }
     .grau {
         background-color: grey;
+    }
+    @media only screen and (orientation: portrait) {
+        .button{
+            height: 100px;
+        }
+        .td{
+            font-size: 100px;
+        }
     }
 </style>
