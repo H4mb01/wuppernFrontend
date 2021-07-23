@@ -51,7 +51,7 @@
         <!-- das tatsächliche Spiel -->
         <div v-if="isLoggedIn && isStarted && !isEnded ">
             <button id="logout" @click="logout()"></button>
-            <h3>Runde {{ runde.aktuell }} / {{ runde.maximal }}</h3>
+            <h1>Runde {{ runde.aktuell }} / {{ runde.maximal }}</h1>
             <p> <span v-if="dran!==username" >   {{ this.gamestate.anDerReihe }} </span> <span v-if="dran===username" >DU b</span>ist an der Reihe. 
                 <span v-if="!ansagen.isAnsagen && gesamtAngesagt <= ansagen.optionen[ansagen.optionen.length-1]" > Es wird geschoben!</span> 
                 <span v-if="!ansagen.isAnsagen && gesamtAngesagt > ansagen.optionen[ansagen.optionen.length-1]" > Es wird gekloppt!</span> 
@@ -284,11 +284,11 @@ export default {
     --kartenhoehe: calc(var(--kartenbreite)*1.5);
     --spielerzahl: 3;
     --spacer: 10px;
-    --fs-h3: 25px;
+    --fs-h1: 25px;
     --fs-p: 17px;
     --avatar-max-breite: calc(var(--spielfeldbreite) / var(--spielerzahl));
-    --avatar-max-hoehe: calc((var(--spielfeldhoehe) - (var(--spacer) *3 + var(--fs-h3) + var(--fs-p)))*1/5 );
-    --max-kartenbreite: calc(var(--spielfeldbreite) / ( 32 / var(--spielerzahl)) * 1.5);
+    --avatar-max-hoehe: calc((var(--spielfeldhoehe) - (var(--spacer) *3 + var(--fs-h1) + var(--fs-p))) * 1/5 );
+    --max-kartenbreite: calc(var(--spielfeldbreite) / 10 * 1.5);
     
     /*colors*/
     /* Liste d Spiele */
@@ -350,8 +350,8 @@ export default {
 
 @media (prefers-color-scheme: dark){
    :root{
-       --bg-clr: rgb(31, 31, 31);
-       --txt-clr: rgb(236, 236, 236);
+       --bg-clr: rgb(34, 34, 34);
+       --txt-clr: rgb(215, 228, 243);
        --logout-btn-clr: rgb(97, 0, 0);
        --logout-btn-clr2: rgb(255, 28, 28);
        --spielerinfo-clr2: rgb(51, 16, 2);
@@ -391,11 +391,11 @@ export default {
         color:red;
         color:var(--warning-clr);
     }
-    h3 {
+    h1 {
         margin-top: var(--spacer);
         padding: 0;
         margin-bottom: 0;
-        font-size: var(--fs-h3)
+        font-size: var(--fs-h1)
     }
     p{
         margin: calc(var(--spacer)/2);
@@ -404,7 +404,7 @@ export default {
     }
     .tisch {
         position: absolute;
-        top: calc(var(--spacer) * 3 + var(--fs-h3) + var(--fs-p) + var(--avatar));
+        top: calc(var(--spacer) * 3 + var(--fs-h1) + var(--fs-p) + var(--avatar));
         left: 5%;
         border: 3px solid grey;
         border: 3px solid var(--tisch-border-clr);
@@ -580,6 +580,9 @@ export default {
         border: 3px solid var(--ansagen-border-clr);
         border-radius: 5px;
         z-index: 999;
+    }
+    h2{
+        font-size: calc(var(--kartenhoehe)*.2)
     }
     .moeglichkeitenContainer {
         display: flex;
