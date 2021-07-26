@@ -294,6 +294,14 @@ export default {
     /* Liste d Spiele */
     --play-btn-clr: rgb(30, 180, 30);
     --light-txt-clr: white;
+    --table-bg-clr: rgb(235, 235, 235);
+    --table-bg-clr2: lightgrey;
+    --table-border-clr: black;
+    --table-hover-bg-clr: rgb(223, 223, 223);
+    --table-head-bg-clr: grey;
+    --table-head-txt-clr: white;
+    --table-row-txt-clr: black;
+    --table-row-hover-txt-clr: black;
 
     /* raum joinen */
     --warning-clr: red;
@@ -337,9 +345,7 @@ export default {
     :root{
        --avatar: var(--max-kartenbreite)
     }
-    #nav{
-        display:none;
-    }
+
 }
 
 @media (orientation: landscape){
@@ -350,18 +356,25 @@ export default {
 
 @media (prefers-color-scheme: dark){
    :root{
-       --bg-clr: rgb(34, 34, 34);
-       --txt-clr: rgb(215, 228, 243);
-       --logout-btn-clr: rgb(97, 0, 0);
-       --logout-btn-clr2: rgb(255, 28, 28);
-       --spielerinfo-clr2: rgb(51, 16, 2);
-       --spielerinfo-clr: rgb(68, 41, 19);
-       --ansagen-bg-clr: rgb(109, 109, 109);
-       --ansagen-border-clr: rgb(73, 73, 73);
-       --ansagen-option-bg-clr: rgb(88, 88, 88);
-       --ansagen-option-bg-clr2: rgb(39, 39, 39);
-       --ansagen-option-txt-clr: rgb(168, 168, 168);
-       --ansagen-option-hover-txt-clr: var(--txt-clr);
+        --bg-clr: rgb(34, 34, 34);
+        --txt-clr: rgb(215, 228, 243);
+        --logout-btn-clr: rgb(97, 0, 0);
+        --logout-btn-clr2: rgb(255, 28, 28);
+        --spielerinfo-clr2: rgb(51, 16, 2);
+        --spielerinfo-clr: rgb(68, 41, 19);
+        --ansagen-bg-clr: rgb(109, 109, 109);
+        --ansagen-border-clr: rgb(73, 73, 73);
+        --ansagen-option-bg-clr: rgb(88, 88, 88);
+        --ansagen-option-bg-clr2: rgb(39, 39, 39);
+        --ansagen-option-txt-clr: rgb(168, 168, 168);
+        --ansagen-option-hover-txt-clr: var(--txt-clr);
+        --table-bg-clr: rgb(85, 84, 84);
+        --table-bg-clr2: grey;
+        --table-border-clr: rgb(255, 255, 255);
+        --table-hover-bg-clr: rgb(223, 223, 223);
+        --table-head-bg-clr: rgb(216, 216, 216);
+        --table-head-txt-clr: rgb(0, 0, 0);
+        --table-row-txt-clr: white;
 
 
    } 
@@ -382,6 +395,7 @@ export default {
         margin: auto;
         position: relative;
         overflow: hidden;
+        box-shadow: inset 0 0 30px 0px black;
     }
     .possible {
         font-size: .75rem;
@@ -481,7 +495,13 @@ export default {
         top: 5px;
         right: 5px;
         height: 50px;
+        height: calc(var(--avatar)*.2);
+        min-height: 20px;
+        max-height: 100px;
         width: 50px;
+        width: calc(var(--avatar)*.2);
+        min-width: 20px;
+        max-width: 100px;
         clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%);
         cursor: pointer;
         transition: all 250ms ease-in-out;
@@ -580,6 +600,7 @@ export default {
         border: 3px solid var(--ansagen-border-clr);
         border-radius: 5px;
         z-index: 999;
+        font-size: calc(var(--kartenhoehe)*.15)
     }
     h2{
         font-size: calc(var(--kartenhoehe)*.2)
@@ -595,11 +616,11 @@ export default {
         z-index: 10;
     }
     .option {
-        width: 80px; 
-        height: 80px;
+        width: calc(var(--kartenbreite)*.5); 
+        height: calc(var(--kartenbreite)*.5);
         text-align: center;
-        font-size: 2rem;
-        padding: calc(40px - 1rem);
+        font-size: calc(var(--kartenbreite)*.2);
+        padding: calc(var(--kartenbreite)*.25 - (var(--kartenbreite)*.1)) ;
         background-color: white;
         background-color: var(--ansagen-option-bg-clr);
         color: grey;

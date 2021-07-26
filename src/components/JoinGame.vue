@@ -82,7 +82,7 @@ export default {
         cursor: pointer;
     }
     .createGame {
-        margin-top: 10px;
+        margin-top: 50px;
         margin-bottom: 30px;
 
     }

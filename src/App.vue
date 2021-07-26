@@ -32,8 +32,10 @@ body {
 }
 
 #nav {
-  padding: 30px;
-  max-height: 10vh;
+  position: absolute;
+  padding: 5px;
+  max-height: 5vh;
+  z-index: 9999;
 }
 
 #nav a {

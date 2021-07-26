@@ -90,23 +90,34 @@ export default {
     tr {
         padding: 7px;
         background-color: rgb(235, 235, 235);
+        background-color: var(--table-bg-clr);
+        color: var(--table-row-txt-clr)
+        
     }
     tr:nth-child(even){
         background-color: lightgrey;
+        background-color: var(--table-bg-clr2);
     }
     tr:hover{
         background-color: rgb(223, 223, 223);
+        background-color: var(--table-hover-bg-clr);
+        color: var(--table-row-hover-txt-clr)
     }
     th {
         padding: 4px;
         border: 1px solid black;
+        border: 1px solid var(--table-border-clr);
         border-bottom: 2px solid black;
+        border-bottom: 2px solid var(--table-border-clr);
         border-collapse: none;
         background-color: grey;
+        background-color: var(--table-head-bg-clr);
         color: white;
+        color: var(--table-head-txt-clr);
     }
     td {
         border: 1px solid black;
+        border: 1px solid var(--table-border-clr);
         border-collapse: collapse;
         padding: none;
     }
