@@ -73,7 +73,9 @@
             :fuehrung="fuehrung"
             :username="username"
             />
-            <Handkarten :ownCards="ownCards" v-on:playCard="playCard($event)" :dran="dran" />
+            <Handkarten :ownCards="ownCardsSortedInversed" :ownCardsSorted="ownCardsSorted" :sort="sort" v-on:playCard="playCard($event)" :dran="dran" />
+            <input type="checkbox" name="sort" id="sort" v-model="sort" >
+            <label for="sort" class="sort" ></label>
         </div>
 
         <!-- der Endscreen -->
@@ -134,6 +136,9 @@ export default {
             reihenfolge: [],
             players: [],
             ownCards: [],
+            ownCardsSorted: [],
+            ownCardsSortedInversed: [],
+            sort: false,
             playedCards: []
         }
     },
@@ -234,6 +239,46 @@ export default {
             }
 
         },
+        sortieren(array){
+            const ZAHL_WERT={
+                "7": 1, 
+                "8": 2,
+                "9": 3,
+                "B": 4,
+                "D": 5,
+                "K": 6,
+                "10": 7,
+                "A": 8
+            }  
+
+            const FARBE_WERT={
+                "♣": 4, "♠": 3, "♥": 2, "♦": 1
+            } 
+            for (let i = 0; i < array.length; i++) {
+               for (let j = i+1; j < array.length; j++) {
+                   console.log("i:", i, "j:", j)
+                   console.log(ZAHL_WERT[array[i].zahl], "<", ZAHL_WERT[array[j].zahl])
+                    if(ZAHL_WERT[array[i].zahl] < ZAHL_WERT[array[j].zahl]){
+                        let temp = array[j];
+                        array[j] = array[i];
+                        array[i] = temp;
+                        console.log("karten getauscht")
+                    }else if ( ZAHL_WERT[array[i].zahl] === ZAHL_WERT[array[j].zahl] && FARBE_WERT[array[i].farbe] < FARBE_WERT[array[j].farbe]){
+                        let temp = array[j];
+                        array[j] = array[i];
+                        array[i] = temp
+                        console.log("karten getauscht")
+                    }
+                    else {
+                        console.log("keine karte getauscht")
+                    }
+                   
+                } 
+                
+            }
+            console.log(array)
+            return array
+        },
         handleGamestate(data){
             if(data){
                 let newGamestate = JSON.parse(data);
@@ -252,8 +297,11 @@ export default {
                 this.ansagen = this.$store.getters.getGamestate.ansagen
                 this.gesamtAngesagt = 0
                 this.players.forEach(e => {this.gesamtAngesagt += e.angesagt})
-                console.log("isAnsagen:",this.ansagen.isAnsagen, "gesamtAngesagt:", this.gesamtAngesagt, "höchste option:", this.ansagen.optionen[this.ansagen.optionen.length-1])
-                
+                this.ownCardsSorted = []
+                this.ownCards.forEach(e=> this.ownCardsSorted.push(e))
+                this.owncardsSorted = this.sortieren(this.ownCardsSorted)
+                this.ownCardsSortedInversed = []
+                this.ownCardsSorted.forEach(e=> this.ownCardsSortedInversed.unshift(e))
                 }
         },
         logout(){
@@ -525,7 +573,7 @@ export default {
         clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%);
         cursor: pointer;
         transition: all 250ms ease-in-out;
-        overflow: visible;
+        overflow: hidden;
     }
     #logout:hover,
     #logout:focus {
@@ -533,6 +581,50 @@ export default {
         background-color: rgb(80, 80, 80);
         background-color: var(--logout-btn-clr2);
     }
+
+    #sort{
+        display: none;
+    }
+    .sort{
+        position: absolute;
+        left: 5px;
+        bottom: calc(var(--kartenhoehe) *.8 );
+        height: calc(var(--kartenhoehe) * .15);
+        min-height: 20px;
+        width: calc(var(--kartenbreite) * .4);
+        min-width: 20px;
+        cursor: pointer;
+    }
+    .sort::before,
+    .sort::after{
+        content: '';
+        background: white;
+        height: calc(var(--kartenhoehe)*.15);
+        width: calc(var(--kartenbreite)*.15);
+        border: 1px solid grey;
+        border-radius: 3px;
+        position: absolute;
+        font-size: calc(var(--kartenhoehe) * .15 - 2px );
+        color: grey;
+        top: 0;
+        transition: all 250ms ease;
+        box-sizing: border-box;
+    }
+    .sort::before{
+        content: '7';
+        left: 0;
+    }
+    .sort::after{
+        content: 'A';
+        left: calc(var(--kartenbreite)*.25);
+    }
+    #sort:checked ~ .sort::before{
+        left: calc(var(--kartenbreite)*.25);
+    }
+    #sort:checked ~ .sort::after{
+        left: 0;
+    }
+
     .players{
         width: 90%;
         margin: auto;

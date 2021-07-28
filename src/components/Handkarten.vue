@@ -1,5 +1,6 @@
 <template>
     <div class="kartencontainer">
+        <div v-if="!sort" class="kartencontainer unsortiert" >
         <div 
         v-for="karte in ownCards" 
         :key="karte" 
@@ -13,6 +14,24 @@
             <div class="mitteBackground" > {{ karte.farbe }} </div> 
             <div class="unten"> {{karte.zahl}} <i class="farbe"> {{karte.farbe}} </i></div>
         </div>
+
+        </div>
+        <div v-if="sort" class="kartencontainer sortiert" >
+        <div 
+        v-for="karte in ownCardsSorted" 
+        :key="karte" 
+        class="karte"
+        @click="playCard(karte)"
+        :class="karte.farbe === '♦'|| karte.farbe === '♥'? 'rot' : 'schwarz'"
+        
+        >
+            <div class="oben"> {{karte.zahl}} <i class="farbe"> {{karte.farbe}} </i></div>
+            <div class="mitte"> {{karte.zahl}}</div>
+            <div class="mitteBackground" > {{ karte.farbe }} </div> 
+            <div class="unten"> {{karte.zahl}} <i class="farbe"> {{karte.farbe}} </i></div>
+        </div>
+
+        </div>
     </div>
 </template>
 
@@ -21,6 +40,8 @@ export default {
     name: "Handkarten",
     props: {
         ownCards: Array,
+        ownCardsSorted: Array,
+        sort: Boolean,
         dran: String,
     },
     data() {
