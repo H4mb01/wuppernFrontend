@@ -30,7 +30,6 @@
                 <td></td>
                 <td><button class="button" @click="createGame()" >erstellen</button></td>
             </tr>
-
             <tr v-for="game in allGames" :key="game.name" > 
                 <td> {{ game.room }} </td>
                 <td> {{ game.players }} </td>
@@ -46,6 +45,9 @@
                 >zuschauen ⏩</button> </td>
             </tr>
         </table>
+    <div v-if="!allGames[0]" >
+        derzeit gibt es kein laufendes Spiel, oder es konnte kein Spiel geladen werden.
+    </div>
     </div>
 </template>
 

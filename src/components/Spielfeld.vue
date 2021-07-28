@@ -33,6 +33,7 @@
                     <div class="playername">{{player.name}}</div>
                 </div>
             </div>
+            <!--
             <div class="reihenfolge">
                 <ol>
                     <li v-for="player in reihenfolge" :key="player"> {{ player }} </li>
@@ -41,6 +42,7 @@
             <div class="randomise">
                 <button @click="randomOrder()">&#9861; zufällig</button>
             </div>
+            -->
             <button 
             class="start" 
             :class="(this.creator === this.username)? 'creator' : '' " 
@@ -142,7 +144,12 @@ export default {
         if(localStorage.getItem('username')){
             this.username = localStorage.getItem('username');
             this.usernameInput = localStorage.getItem('username')
+            this.stay = true
             this.joinPossible()
+        }
+        else {
+            this.username = ''
+            this.usernameInput = ''
         }
         this.socket.on("gamestate", data => {
            this.handleGamestate(data)
@@ -164,6 +171,7 @@ export default {
         this.socket.on("joinRoom", (room, username) => {
             this.room = room
             this.usernameInput = username
+            this.username = username
             this.joinGame("player")
         })
     },
@@ -201,7 +209,7 @@ export default {
         joinGame(option){
             if(option === "player"){
                 if(this.usernameInput !== '.watcher'){ //geschützter Name
-                    this.socket.emit('joinPossible', this.usernameInput, this.room)
+                    this.joinPossible()
                 
                     if(this.possible){
                         this.socket.emit('joinRoom', this.usernameInput, this.room)
@@ -210,6 +218,12 @@ export default {
                         if(this.stay === true){
                             localStorage.setItem('username', this.username)
                         }
+                        else {
+                            localStorage.removeItem("username")
+                        }
+                    }
+                    else{
+                        console.log("can't join room")
                     }
                 } else {
                     this.possibleText = "verbotener Name"
@@ -260,7 +274,13 @@ export default {
            this.create = !this.create 
         },
         createGame(event){
-            this.socket.emit("createNewGame", event.room, event.name)
+            if(event.room === '' || event.name === ''){
+                console.log("Fehler, beide Felder müssen ausgefüllt sein")
+            }
+            else {
+                this.possible = true;
+                this.socket.emit("createNewGame", event.room, event.name)
+            }
         },
         randomOrder(){
             this.socket.emit("randomOrder", this.username, this.room)
@@ -514,10 +534,8 @@ export default {
         background-color: var(--logout-btn-clr2);
     }
     .players{
-        position: absolute;
-        width: 60%;
-        top:0;
-        left: 0;
+        width: 90%;
+        margin: auto;
         height: 100%;
         display: flex;
         justify-content: center;
