@@ -451,6 +451,10 @@ export default {
 </style>
 
 <style scoped>
+    #nav{
+        display: none !important;
+    }
+
     .spielfeld {
         box-sizing: border-box;
         border: 2px solid black;
