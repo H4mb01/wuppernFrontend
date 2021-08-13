@@ -1,12 +1,12 @@
 <template>
 <div class="upper">
     <div v-for="player in players" :key="player" class="spielercontainer">
-        <div class="avatar" v-bind:class="{dran: (dran===player.name), big: (dran===player.name && player.name===username)}" >
+        <div class="avatar" >
             <div :class="player.name === fuehrung ? 'führung' : ''"></div>
         </div>
-        <div v-if="username === player.name" class="du">DU</div>
+        <div v-if="dran === player.name" class="dran">DRAN</div>
         <div class="spieler">
-            <span class="b">{{player.name}}</span> <br>
+            <span class="b" v-bind:class="{du: (username === player.name)}" >{{player.name}}</span> <br>
 
             <span class="b" > {{player.punkte}} </span>  
             (<span :class="(player.aktuell === player.angesagt ? 'korrekt' : 'inkorrekt')">{{player.aktuell}}</span>/{{player.angesagt}})
@@ -44,9 +44,8 @@
 </script>
 
 <style scoped>
-    .du{
+    .dran{
         min-width: calc(var(--avatar)*.4);
-        min-height: calc(var(--avatar)*.25);
         border: 2px solid red;
         border: 2px solid var(--du-clr);
         border-radius: calc(var(--avatar)*.05);
@@ -59,7 +58,7 @@
         font-size: calc(var(--avatar)/6);
         color: red;
         color: var(--du-clr);
-        padding: 0;
+        padding: calc(var(--avatar)/48) calc(var(--avatar)/24);
         font-weight: bold;
         user-select: none;
 
@@ -96,6 +95,9 @@
         height: calc(var(--avatar)*3.2);
         position: relative;
         z-index: 3;
+    }
+    .du{
+        text-decoration: underline;
     }
 
     .avatar {
@@ -134,12 +136,6 @@
         top: 50%;
         left: 10%;
     }
-    .dran {
-        background-color: rgb(120, 209, 120);
-        background-color: var(--avatar-active-clr);
-        border: 3px solid green;
-        border: 3px solid var(--avatar-active-clr2);
-    }
     .dran::before,
     .dran::after {
         background-color: green;
@@ -166,6 +162,6 @@
         color:var(--warning-clr);
     }
     .big{
-        transform:scale(1.2)
+        transform:scale(1.0)
     }
 </style>

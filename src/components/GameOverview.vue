@@ -19,6 +19,7 @@
                 </td>
                 <td>
                     <input 
+                    v-on:keyup.enter="createGame()"
                 v-model="nameInput" 
                 type="text" 
                 name="nameInput" 

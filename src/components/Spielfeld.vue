@@ -12,7 +12,8 @@
          <!-- Raum beitreten und Namen wählen -->
         <div v-if="!isLoggedIn && room!=='' ">
             <div class="joinContainer">
-                <input @input="joinPossible()" v-model='usernameInput' type="text" name="name" id="name" placeholder="dein Name" maxlength="12" autofocus required>
+                <button id="logout" @click="logout()"></button>
+                <input @input="joinPossible()" v-model='usernameInput' v-on:keyup.enter="joinGame('player')" type="text" name="name" id="name" placeholder="dein Name" maxlength="12" autofocus required>
                 <p class="possible" >{{this.possibleText}}</p>
                 <input type="checkbox" name="stay" id="stay" v-model='stay' >
                 <label for="stay" class="stay">eingeloggt bleiben?</label>
@@ -58,6 +59,30 @@
                 <span v-if="!ansagen.isAnsagen && gesamtAngesagt <= ansagen.optionen[ansagen.optionen.length-1]" > Es wird geschoben!</span> 
                 <span v-if="!ansagen.isAnsagen && gesamtAngesagt > ansagen.optionen[ansagen.optionen.length-1]" > Es wird gekloppt!</span> 
             </p>
+            <div class="chat" >
+                <button v-if="!isBigChat" class="toggleChat" @click="toggleChat()" >chat</button> 
+                <div v-if="!isBigChat" @click="toggleChat()" class="lastmsg">
+                    <span v-if="(lastmsg.username !== '___SYSTEM___')" >
+                        [{{ lastmsg.username }}]: 
+                    </span>
+                    <span>
+                        {{ lastmsg.text }}
+                    </span>
+                </div> 
+                <input v-on:keyup.enter="sendChatMessage" v-if="isBigChat" type="text" name="chatInput" id="chatInput" v-model='chatInput' >
+                <button v-if="isBigChat" class="chatSend" @click="sendChatMessage" >SENDEN</button>
+                <div ref="bigChat" v-bind:class="{ chatActive: isBigChat }" class="bigChat" >
+                    <button class="closeChat" @click="toggleChat()" >close</button>
+                    <div class="nachricht" v-for="nachricht in msg" :key="nachricht.time">
+                        <span v-if="(nachricht.username !== '___SYSTEM___')" >
+                        [{{ nachricht.username }}]: 
+                        </span>
+                        <span>
+                        {{nachricht.text}}
+                        </span>
+                    </div>
+                </div>
+            </div>
             <div class="tisch">
                 <div v-if="ansagen.isAnsagen" class="ansagen" :class="{ spezial: runde.aktuell === 1 || runde.aktuell === runde.maximal }" >
                     <h2> {{ ansagen.aktuell }} muss ansagen! </h2>
@@ -76,16 +101,53 @@
             <Handkarten :ownCards="ownCardsSortedInversed" :ownCardsSorted="ownCardsSorted" :sort="sort" v-on:playCard="playCard($event)" :dran="dran" />
             <input type="checkbox" name="sort" id="sort" v-model="sort" >
             <label for="sort" class="sort" ></label>
+            <div class="cheatSheet">
+                <div class="cheatCard">A</div>
+                <div class="cheatCard">A</div>
+                <div class="cheatCard">A</div>
+                <div class="cheatCard">A</div>
+                <div class="cheatCard zehn">10</div>
+                <div class="cheatCard zehn">10</div>
+                <div class="cheatCard zehn">10</div>
+                <div class="cheatCard zehn">10</div>
+                <div class="cheatCard">K</div>
+                <div class="cheatCard">K</div>
+                <div class="cheatCard">K</div>
+                <div class="cheatCard">K</div>
+                <div class="cheatCard">D</div>
+                <div class="cheatCard">D</div>
+                <div class="cheatCard">D</div>
+                <div class="cheatCard">D</div>
+                <div class="cheatCard">B</div>
+                <div class="cheatCard">B</div>
+                <div class="cheatCard">B</div>
+                <div class="cheatCard">B</div>
+                <div class="cheatCard">9</div>
+                <div class="cheatCard">9</div>
+                <div class="cheatCard">9</div>
+                <div class="cheatCard">9</div>
+                <div class="cheatCard">8</div>
+                <div class="cheatCard">8</div>
+                <div class="cheatCard">8</div>
+                <div class="cheatCard">8</div>
+                <div class="cheatCard">7</div>
+                <div class="cheatCard">7</div>
+                <div class="cheatCard">7</div>
+                <div class="cheatCard">7</div>
+            </div>
         </div>
 
         <!-- der Endscreen -->
         <div v-if="isEnded" >
             <button id="logout" @click="logout()"></button>
             <div class="endscreen" >
-                 {{ fuehrung }} hat gewonnen! 
+                {{ fuehrung }} hat gewonnen! 
                 <div class="pokal" >
                     1
                     <div class="pokalfuss" ></div>
+                </div>
+                <div class="platzierungcontainer" >
+                    <div class="platzierung" v-for="platz in platzierung" :key="platz.name"> Platz {{ platz.platz }}: {{ platz.name }} ({{ platz.punkte }}) </div>
                 </div>
 
 
@@ -139,7 +201,12 @@ export default {
             ownCardsSorted: [],
             ownCardsSortedInversed: [],
             sort: false,
-            playedCards: []
+            playedCards: [],
+            platzierung: [],
+            msg: [],
+            lastmsg: {username: 'SYSTEM', text: 'Willkommen!', time: 0},
+            isBigChat: false,
+            chatInput: '',
         }
     },
     created() {
@@ -178,6 +245,10 @@ export default {
             this.usernameInput = username
             this.username = username
             this.joinGame("player")
+        })
+        this.socket.on('message', (msg) => {
+            this.msg.push(msg)
+            this.lastmsg = msg
         })
     },
     methods: {
@@ -302,6 +373,16 @@ export default {
                 this.owncardsSorted = this.sortieren(this.ownCardsSorted)
                 this.ownCardsSortedInversed = []
                 this.ownCardsSorted.forEach(e=> this.ownCardsSortedInversed.unshift(e))
+                this.platzierung = []
+                this.players.forEach(e=> this.platzierung.push({platz: 0, name: e.name, punkte: e.punkte}))
+                this.platzierung.forEach(e=>{
+                    e.platz++
+                    this.platzierung.forEach(f=>{
+                        if(e.punkte < f.punkte){
+                            e.platz++
+                        }
+                    })
+                })
                 }
         },
         logout(){
@@ -335,6 +416,21 @@ export default {
         },
         sagAn(option){
             this.socket.emit("ansagen", this.room, this.username, option )
+        },
+        toggleChat(){
+            this.isBigChat = !this.isBigChat;
+            console.log(this.$refs.bigChat.scrollTop)
+            console.log(this.$refs.bigChat.scrollHeight)
+            if(this.$refs.bigChat.scrollHeight !== 0){
+                this.$refs.bigChat.scrollTop = this.$refs.bigChat.scrollHeight
+            }
+        },
+        sendChatMessage(){
+            if(this.chatInput){
+                this.socket.emit('chatMessage', this.chatInput);
+                this.chatInput = ''
+                this.isBigChat = false;
+            }
         }
     }
 }
@@ -355,9 +451,12 @@ export default {
     --fs-h1: 25px;
     --fs-p: 17px;
     --avatar-max-breite: calc(var(--spielfeldbreite) / var(--spielerzahl));
-    --avatar-max-hoehe: calc((var(--spielfeldhoehe) - (var(--spacer) *3 + var(--fs-h1) + var(--fs-p))) * 1/5 );
+    --avatar-max-hoehe: calc((var(--spielfeldhoehe) - (var(--spacer) *3 + var(--fs-h1) + var(--fs-p) * 1.5 )) * 1/5 );
     --max-kartenbreite: calc(var(--spielfeldbreite) / 10 * 1.5);
     
+    
+    --hoehe-cs: calc(var(--spielfeldhoehe)/32);
+
     /*colors*/
     /* Liste d Spiele */
     --play-btn-clr: rgb(30, 180, 30);
@@ -400,6 +499,8 @@ export default {
     --ansagen-option-hover-txt-clr: black;
     --logout-btn-clr: rgb(68,68,68);
     --logout-btn-clr2: rgb(80,80,80);
+    --chat-bg-clr: lightgrey;
+    --big-chat-bg-clr: rgba(0, 1, 10, 0.979);
 
     /* Endscreen */
     --endscreen-bg-clr: grey;
@@ -444,6 +545,8 @@ export default {
         --table-head-txt-clr: rgb(0, 0, 0);
         --table-row-txt-clr: white;
 
+        --back-btn-clr: white;
+
 
    } 
 }
@@ -451,10 +554,6 @@ export default {
 </style>
 
 <style scoped>
-    #nav{
-        display: none !important;
-    }
-
     .spielfeld {
         box-sizing: border-box;
         border: 2px solid black;
@@ -490,7 +589,7 @@ export default {
     }
     .tisch {
         position: absolute;
-        top: calc(var(--spacer) * 3 + var(--fs-h1) + var(--fs-p) + var(--avatar));
+        top: calc(var(--spacer) * 3 + var(--fs-h1) + var(--fs-p) *2.5 + var(--avatar));
         left: 5%;
         border: 3px solid grey;
         border: 3px solid var(--tisch-border-clr);
@@ -591,13 +690,14 @@ export default {
     }
     .sort{
         position: absolute;
-        left: 5px;
+        left: calc(var(--hoehe-cs)/1.5 + 5px);
         bottom: calc(var(--kartenhoehe) *.8 );
         height: calc(var(--kartenhoehe) * .15);
         min-height: 20px;
         width: calc(var(--kartenbreite) * .4);
         min-width: 20px;
         cursor: pointer;
+        z-index: 101;
     }
     .sort::before,
     .sort::after{
@@ -707,17 +807,18 @@ export default {
         height: 80%;
         max-height: var(--kartenhoehe);
         margin-left: 2%;
-        top: calc(var(--avatar)*9/20);
+        top: calc(var(--avatar)*.51);
         background-color: lightgray;
         background-color: var(--ansagen-bg-clr);
         border: 3px solid grey;
         border: 3px solid var(--ansagen-border-clr);
         border-radius: 5px;
-        z-index: 999;
+        z-index: 100;
         font-size: calc(var(--kartenhoehe)*.15)
     }
     h2{
-        font-size: calc(var(--kartenhoehe)*.2)
+        font-size: calc(var(--kartenhoehe)*.2);
+        margin-top: calc(var(--kartenhoehe)*.1);
     }
     .moeglichkeitenContainer {
         display: flex;
@@ -900,5 +1001,96 @@ export default {
         border-radius: 0 0 0 50%;
     }
 
+    .platzierungcontainer{
+        margin-top: 50px;
+    }
+    .platzierung{
+        max-width: 30%;
+        display: inline-block;
+    }
+
+    .cheatSheet{
+        position: absolute;
+        top:0;
+        left:0;
+        display: flex;
+        flex-flow: column;
+        z-index: 1;
+    }
+    .cheatCard{
+        height: var(--hoehe-cs);
+        width: calc(var(--hoehe-cs)/1.5);
+        color: black;
+        border: 1px solid black;
+        text-align: center;
+        font-size: calc(var(--hoehe-cs)/1.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+    }
+    .zehn{
+        font-size: calc(var(--hoehe-cs)/2);
+        font-weight: 700;
+    }
+    .cheatCard:nth-child(4n){
+        color: red;
+    }
+    .cheatCard:nth-child(4n+3){
+        color: red;
+    }
+
+    .chat{
+        width: 90%;
+        margin: auto;
+        text-align: left;
+        font-size: var(--fs-p);
+        max-height: calc(var(--fs-p)*1.5);
+        background: var(--chat-bg-clr);
+        margin-bottom: calc(var(--fs-p)/2.0);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    .bigChat{
+        display: none;
+        overflow: auto;
+        width: 90%;
+        position: absolute;
+        max-height: calc(90vh - (var(--fs-p)*2 + var(--spacer)*3 +var(--fs-h1) ));
+        background-color: var(--big-chat-bg-clr);
+        z-index: 102;
+        left: 5%;
+        padding: calc(var(--fs-p)*0.5);
+        text-align: left;
+        color: white;
+        border-radius: 0 0 5px 5px;
+        font-weight: 600;
+    }
+    .closeChat{
+        position: absolute;
+        position: sticky;
+        float: right;
+        right: 0;
+        top: 0;
+    }
+    .nachricht{
+        padding-bottom: calc(var(--fs-p)*.25);
+        padding-top: calc(var(--fs-p)*.25);
+
+    }
+    #chatInput{
+        width: 90%;
+    }
+    .chatSend{
+        width: 10%;
+    }
+    .chatActive{
+        display: block;
+    }
+    .lastmsg{
+        display: inline;
+        overflow: hidden;
+        max-height: 100%;
+    }
 
 </style>

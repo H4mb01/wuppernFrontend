@@ -1,5 +1,7 @@
 <template>
   <div class="hilfe">
+    <!-- <router-link to="/" class="back" target="_parent" >&#5176;</router-link> -->
+    <a @click="closeWindow()" class="back" target="_parent" >&#5176;</a>
     <h1>Hilfe</h1>
     <h2>Spielregeln</h2>
     <p></p>
@@ -40,9 +42,30 @@
   </div>
 </template>
 
+<script>
+  export default {
+    name: "Help",
+    methods: {
+      closeWindow() {
+        window.close();
+      }
+    }
+  }
+</script>
+
 <style scoped>
   p{
     max-width: 75ch;
     margin: auto;
+  }
+  .back{
+    position: absolute;
+    top: 0;
+    left: 20px;
+    font-size: 40px;
+    color: grey;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
   }
 </style>
