@@ -60,7 +60,9 @@
                 <span v-if="!ansagen.isAnsagen && gesamtAngesagt > ansagen.optionen[ansagen.optionen.length-1]" > Es wird gekloppt!</span> 
             </p>
             <div class="chat" >
-                <button v-if="!isBigChat" class="toggleChat" @click="toggleChat()" >chat</button> 
+                <button v-if="!isBigChat" class="toggleChat" @click="toggleChat()" >
+                    <fa icon="comment" />chat 
+                </button> 
                 <div v-if="!isBigChat" @click="toggleChat()" class="lastmsg">
                     <span v-if="(lastmsg.username !== '___SYSTEM___')" >
                         [{{ lastmsg.username }}]: 
@@ -163,8 +165,6 @@
     import JoinGame from "@/components/JoinGame.vue";
     import io from "socket.io-client";
     import { mapActions } from 'vuex';
-    // import axios from 'axios'
-
 
 
 export default {
