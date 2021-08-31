@@ -111,7 +111,6 @@
         border: 2px solid var(--avatar-clr2);
         overflow: hidden;
         box-shadow: 1px 1px 5px 1px black;
-        transition: all 250ms ease-in-out;
     }
     .avatar::before {
         content: '';

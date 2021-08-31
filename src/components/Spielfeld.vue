@@ -60,9 +60,7 @@
                 <span v-if="!ansagen.isAnsagen && gesamtAngesagt > ansagen.optionen[ansagen.optionen.length-1]" > Es wird gekloppt!</span> 
             </p>
             <div class="chat" >
-                <button v-if="!isBigChat" class="toggleChat" @click="toggleChat()" >
-                    <fa icon="comment" />chat 
-                </button> 
+                    <font-awesome-icon :icon="['fas', 'comment-dots']" class="toggleChat" @click="toggleChat()" v-if="!isBigChat" />
                 <div v-if="!isBigChat" @click="toggleChat()" class="lastmsg">
                     <span v-if="(lastmsg.username !== '___SYSTEM___')" >
                         [{{ lastmsg.username }}]: 
@@ -72,9 +70,9 @@
                     </span>
                 </div> 
                 <input v-on:keyup.enter="sendChatMessage" v-if="isBigChat" type="text" name="chatInput" id="chatInput" v-model='chatInput' >
-                <button v-if="isBigChat" class="chatSend" @click="sendChatMessage" >SENDEN</button>
+                    <font-awesome-icon v-if="isBigChat" class="chatSend" @click="sendChatMessage" icon="paper-plane" />
                 <div ref="bigChat" v-bind:class="{ chatActive: isBigChat }" class="bigChat" >
-                    <button class="closeChat" @click="toggleChat()" >close</button>
+                    <font-awesome-icon icon="window-close" class="closeChat" @click="toggleChat()" />
                     <div class="nachricht" v-for="nachricht in msg" :key="nachricht.time">
                         <span v-if="(nachricht.username !== '___SYSTEM___')" >
                         [{{ nachricht.username }}]: 
@@ -84,6 +82,7 @@
                         </span>
                     </div>
                 </div>
+                <div v-if="isBigChat" class="bigChatOuter" @click="toggleChat()" ></div>
             </div>
             <div class="tisch">
                 <div v-if="ansagen.isAnsagen" class="ansagen" :class="{ spezial: runde.aktuell === 1 || runde.aktuell === runde.maximal }" >
@@ -697,7 +696,7 @@ export default {
         width: calc(var(--kartenbreite) * .4);
         min-width: 20px;
         cursor: pointer;
-        z-index: 101;
+        z-index: 100;
     }
     .sort::before,
     .sort::after{
@@ -1041,7 +1040,7 @@ export default {
     }
 
     .chat{
-        width: 90%;
+        width: 85%;
         margin: auto;
         text-align: left;
         font-size: var(--fs-p);
@@ -1051,20 +1050,38 @@ export default {
         border-radius: 3px;
         overflow: hidden;
     }
+    .toggleChat{
+        position: absolute;
+        left: 5%;
+        cursor: pointer;
+        color: rgb(77, 77, 77);
+    }
+    .toggleChat:hover,
+    .toggleChat:focus{
+        color: rgb(59, 59, 59);
+    }
     .bigChat{
         display: none;
         overflow: auto;
-        width: 90%;
+        width: 85%;
         position: absolute;
         max-height: calc(90vh - (var(--fs-p)*2 + var(--spacer)*3 +var(--fs-h1) ));
         background-color: var(--big-chat-bg-clr);
         z-index: 102;
-        left: 5%;
+        left: 7.5%;
         padding: calc(var(--fs-p)*0.5);
         text-align: left;
         color: white;
         border-radius: 0 0 5px 5px;
         font-weight: 600;
+    }
+    .bigChatOuter{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 101;
     }
     .closeChat{
         position: absolute;
@@ -1072,6 +1089,7 @@ export default {
         float: right;
         right: 0;
         top: 0;
+        cursor: pointer;
     }
     .nachricht{
         padding-bottom: calc(var(--fs-p)*.25);
@@ -1080,9 +1098,15 @@ export default {
     }
     #chatInput{
         width: 90%;
+        position: relative;
+        z-index: 102;
     }
     .chatSend{
         width: 10%;
+        cursor: pointer;
+    }
+    .chatSend:hover{
+        color: rgb(0, 0, 107);
     }
     .chatActive{
         display: block;

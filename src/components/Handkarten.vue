@@ -78,7 +78,7 @@ export default {
         justify-content: center;
         align-items: center; 
         cursor: pointer;
-        transition: 250ms ease;
+        transition: transform 250ms ease;
         box-shadow: 1px 1px 5px 1px black;
         overflow: hidden;
         margin-right: calc(var(--kartenbreite)*-0.33);

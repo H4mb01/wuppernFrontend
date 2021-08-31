@@ -31,11 +31,12 @@
     }
     .karte {
         background-color: var(--karte-bg);
-        border: 3px solid black;
-        border-radius: 12.5px;
+        border: calc(var(--kartenbreite)*0.03) solid black;
+        border-radius: calc(var(--kartenbreite)*0.125);
         width: var(--kartenbreite);
         height: var(--kartenhoehe);
         position: relative;
+        top: calc(-1*(var(--avatar)/4));
         user-select: none;
         display: flex;
         justify-content: center;

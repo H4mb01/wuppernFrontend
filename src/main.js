@@ -5,12 +5,23 @@ import router from './router'
 import store from './store'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { 
+  faUserSecret, 
+  faCommentDots,
+  faPaperPlane,
+  faWindowClose,
+} 
+from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faUserSecret)
+library.add(
+  faUserSecret, 
+  faCommentDots,
+  faPaperPlane,
+  faWindowClose,
+)
 
-Vue.component('fa', FontAwesomeIcon)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 
 Vue.config.productionTip = false
