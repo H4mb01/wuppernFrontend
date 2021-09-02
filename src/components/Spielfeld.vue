@@ -86,7 +86,14 @@
             </div>
             <div class="tisch">
                 <div v-if="ansagen.isAnsagen" class="ansagen" :class="{ spezial: runde.aktuell === 1 || runde.aktuell === runde.maximal }" >
-                    <h2> {{ ansagen.aktuell }} muss ansagen! </h2>
+                    <h2> {{ ansagen.aktuell }} 
+                        <span v-if="!ansagen.not">
+                            muss ansagen! 
+                        </span>
+                        <span v-if="ansagen.not" >
+                            darf nicht {{ ansagen.not }} sagen!
+                        </span>
+                        </h2>
                     <div class="moeglichkeitenContainer" v-if="ansagen.aktuell === username" >
                         <div class="option" v-for="option in ansagen.optionen" :key="option" @click="sagAn(option)" > {{ option }} </div>
                     </div>
