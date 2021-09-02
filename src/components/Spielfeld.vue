@@ -1111,6 +1111,8 @@ export default {
     .chatSend{
         width: 10%;
         cursor: pointer;
+        position: relative;
+        z-index: 102;
     }
     .chatSend:hover{
         color: rgb(0, 0, 107);
