@@ -27,7 +27,7 @@
 
         <!-- Warteraum und Reihenfolge bestimmen -->
         <div v-if="isLoggedIn && !isStarted">
-            <button id="logout" @click="logout()"></button>
+            <font-awesome-icon icon="times" id="logout" @click="logout()"/>
             <div class="players">
                 <div v-for="player in players" :key="player" class="player">
                     <div class="avatar"></div>
@@ -666,8 +666,8 @@ export default {
         cursor: pointer;
     }
     #logout{
-        background-color: rgb(68, 68, 68);
-        background-color: var(--logout-btn-clr);
+        color: rgb(68, 68, 68);
+        color: var(--logout-btn-clr);
         position: absolute;
         top: 5px;
         right: 5px;
@@ -679,16 +679,17 @@ export default {
         width: calc(var(--avatar)*.2);
         min-width: 20px;
         max-width: 100px;
-        clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%);
         cursor: pointer;
         transition: all 250ms ease-in-out;
         overflow: hidden;
+        border: none;
+        outline: none;
     }
     #logout:hover,
     #logout:focus {
         transform: rotate(.25turn);
-        background-color: rgb(80, 80, 80);
-        background-color: var(--logout-btn-clr2);
+        color: rgb(80, 80, 80);
+        color: var(--logout-btn-clr2);
     }
 
     #sort{

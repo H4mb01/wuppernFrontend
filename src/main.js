@@ -10,6 +10,7 @@ import {
   faCommentDots,
   faPaperPlane,
   faWindowClose,
+  faTimes,
 } 
 from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -19,6 +20,7 @@ library.add(
   faCommentDots,
   faPaperPlane,
   faWindowClose,
+  faTimes,
 )
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
